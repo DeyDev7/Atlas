@@ -4,7 +4,7 @@ This repository exists to keep my development environment portable and reproduci
 
 ## What's here
 
-- **`system/dotfiles/`** — My personal configs: `.zshrc`, `.gitconfig`, `.tmux.conf`, `.p10k.zsh`, and Neovim config under `config/nvim/`.
+- **`system/dotfiles/`** — My personal configs: `.zshrc`, `.gitconfig`, `.tmux.conf`, `.p10k.zsh`, Neovim config under `config/nvim/`, and oh-my-posh theme under `config/oh-my-posh/`.
 - **`system/scripts/`** — Environment setup and management shell scripts:
   - `setup-env.sh` — Unified cross-platform setup (macOS and Linux/WSL) that installs tools and applies dotfiles.
   - `collect-configs.sh` — Collect current machine's dotfiles back into the repo.

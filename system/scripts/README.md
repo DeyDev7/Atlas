@@ -25,12 +25,14 @@ The unified `setup-env.sh` script provides:
 ## Usage
 
 ### Full Installation
+
 ```bash
 # From the scripts directory
 ./setup-env.sh install
 ```
 
 This will:
+
 1. Detect your operating system
 2. Install system dependencies (APT on Linux, Homebrew on macOS)
 3. Install and configure development tools (NVM, Node.js, pnpm, uv)
@@ -39,6 +41,7 @@ This will:
 6. Generate an environment inventory
 
 ### Dotfiles Management
+
 ```bash
 # Collect current dotfiles to the repository
 ./setup-env.sh collect
@@ -51,7 +54,9 @@ This will:
 ```
 
 ### Legacy Scripts
+
 The original scripts are still available for backward compatibility:
+
 - `./collect-configs.sh` - Collect dotfiles
 - `./restore.sh` - Full environment restore (Linux-focused)
 - `./generate-inventory.sh` - Generate package inventory
@@ -59,20 +64,23 @@ The original scripts are still available for backward compatibility:
 ## What Gets Installed
 
 ### Package Managers
+
 - **Homebrew** (for macOS and Linux user packages)
 - **PNPM** (primary Node.js package manager - faster and more secure than npm/yarn)
 - **uv** (ultra-fast Python package installer and resolver - replaces pip)
 
 ### Development Tools
+
 - **Node.js** (via NVM for version management)
 - **Python** (via uv for isolated environments)
 - **Go** (via Homebrew/APT)
 - **Git** and related tools (gh, git-delta, lazygit)
-- **Shell** (zsh with Oh My Zsh, Powerlevel10k, autosuggestions, syntax highlighting)
+- **Shell** (zsh with Oh My Zsh, oh-my-posh, autosuggestions, syntax highlighting)
 - **Editor** (Neovim with basic configuration)
 - **Terminal** (tmux)
 
 ### Enhanced CLI Tools (Better Defaults)
+
 - `bat` (cat with syntax highlighting)
 - `eza`/`lsd` (modern ls replacements)
 - `fd` (find alternative)
@@ -85,7 +93,9 @@ The original scripts are still available for backward compatibility:
 - `lazydocker`/`lazygit` (Docker/Git UIs)
 
 ### Shell Configuration
+
 The script configures your shell with:
+
 - Proper PATH settings for all package managers
 - Useful aliases for common commands
 - History configuration
@@ -103,18 +113,23 @@ The script configures your shell with:
 ## Customization
 
 ### Adding Custom Packages
+
 To add additional packages to the installation, modify the arrays in `setup-env.sh`:
+
 - `BREW_PACKAGES` for Homebrew packages
 - `APT_PACKAGES` for Linux system packages (Linux only)
-- `NPM_PACKAGES` for global npm packages
+- `NPM_PACKAGES` for global npm packages (used only to install pnpm; global packages go via pnpm)
+- `PNPM_PACKAGES` for global packages installed via pnpm
 - `UV_TOOLS` for Python tools installed via uv
 
 ### Custom Dotfiles
+
 The script automatically collects and restores:
+
 - Shell configs (`.zshrc`, `.bashrc`)
 - Git configs (`.gitconfig`, `.gitignore_global`)
 - Terminal multiplexer config (`.tmux.conf`)
-- Powerlevel10k config (`.p10k.zsh`)
+- Powerlevel10k config (`.p10k.zsh`) and oh-my-posh theme (`config/oh-my-posh/`)
 - Neovim configuration (`~/.config/nvim/`)
 
 To add more files, edit the `FILES_TO_COLLECT` and `FILES_TO_RESTORE` arrays in the script.
@@ -147,12 +162,15 @@ To add more files, edit the `FILES_TO_COLLECT` and `FILES_TO_RESTORE` arrays in 
    - The script detects your shell from `$SHELL` environment variable
 
 ### Getting Help
+
 ```bash
 ./setup-env.sh help
 ```
 
 ## License
+
 MIT License - feel free to modify and adapt for your own use.
 
 ## Acknowledgments
+
 Inspired by various dotfiles frameworks and environment setup scripts from the community.
