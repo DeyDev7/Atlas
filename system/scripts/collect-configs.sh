@@ -13,6 +13,8 @@ FILES=(
     ".zshrc"
     ".tmux.conf"
     ".p10k.zsh"
+    ".gitconfig"
+    ".gitignore_global"
 )
 
 for file in "${FILES[@]}"; do
@@ -30,6 +32,13 @@ if [[ -d "$HOME/.config/nvim" ]]; then
     # Use rsync if available to avoid recursive cp issues, otherwise standard cp
     cp -r "$HOME/.config/nvim/." "$DOTFILES_DIR/config/nvim/"
     echo "✅ Copied nvim config"
+fi
+
+# Collect ~/.config/oh-my-posh
+if [[ -d "$HOME/.config/oh-my-posh" ]]; then
+    mkdir -p "$DOTFILES_DIR/config/oh-my-posh"
+    cp -r "$HOME/.config/oh-my-posh/." "$DOTFILES_DIR/config/oh-my-posh/"
+    echo "✅ Copied oh-my-posh config"
 fi
 
 echo "✨ Collection complete."

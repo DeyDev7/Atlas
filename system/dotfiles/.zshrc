@@ -2,8 +2,14 @@
 # 1. ENVIRONMENT & PATH (Must be at the very top)
 # =============================================================================
 
+# Enable PATH array dedup before anything modifies it
+typeset -U path
+
 # CRITICAL: Restore system PATH first before anything else
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+
+# .local/bin added via path array
+path=("$HOME/.local/bin" $path)
 
 # Homebrew Setup (Sets PATH and HOMEBREW_PREFIX)
 if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
@@ -11,7 +17,7 @@ if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
 fi
 
 # Bootdev CLI Setup - CORRECT PATH
-export PATH="$HOME/.local/opt/go-bin-v1.25.5/bin:$PATH"
+path=("$HOME/.local/opt/go-bin-v1.25.5/bin" $path)
 if command -v bootdev &> /dev/null; then
   eval "$(bootdev completion zsh)" 2>/dev/null || true
 fi
@@ -29,10 +35,10 @@ export VISUAL=nvim
 export TERM=xterm-256color
 
 # =============================================================================
-# 2. PLUGIN INITIALIZATION (Before compinit, after PATH)
+# 2. PROMPT & PLUGIN INITIALIZATION (Before compinit, after PATH)
 # =============================================================================
 
-# Powerlevel10k Instant Prompt - MUST stay near top
+# Powerlevel10k Instant Prompt - MUST stay near the top of the file
 typeset -g POWERLEVEL10K_INSTANT_PROMPT=quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -48,14 +54,14 @@ if command -v fzf &> /dev/null; then
   eval "$(fzf --zsh)" 2>/dev/null || true
 fi
 
-# Source Plugins using HOMEBREW_PREFIX
+# Prompt theme + autosuggestions from Homebrew.
+# NOTE: zsh-syntax-highlighting is NOT here — it MUST load last, see section 6.
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
   source ${HOMEBREW_PREFIX}/share/powerlevel10k/powerlevel10k.zsh-theme 2>/dev/null
-  source ${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
   source ${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 fi
 
-# Load P10K Config
+# Load Powerlevel10k config
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # =============================================================================
@@ -97,7 +103,7 @@ zed() {
     fi
 }
 
-# Fix prompt redraw on terminal resize
+# Fix prompt redraw on terminal resize (works with p10k)
 function _p10k_resize_handler() {
   zle && zle reset-prompt
 }
@@ -116,7 +122,6 @@ fi
 # Run compinit safely
 autoload -Uz compinit
 compinit -C 2>/dev/null
-export PATH="$HOME/.local/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/daimo/google-cloud-sdk/path.zsh.inc' ]; then . '/home/daimo/google-cloud-sdk/path.zsh.inc'; fi
@@ -125,7 +130,7 @@ if [ -f '/home/daimo/google-cloud-sdk/path.zsh.inc' ]; then . '/home/daimo/googl
 if [ -f '/home/daimo/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/daimo/google-cloud-sdk/completion.zsh.inc'; fi
 
 # Browser-Use
-export PATH="/home/daimo/.browser-use-env/bin:/home/daimo/.local/bin:$PATH"
+path=("/home/daimo/.browser-use-env/bin" $path)
 
 # pnpm
 export PNPM_HOME="/home/daimo/.local/share/pnpm"
@@ -134,3 +139,15 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+# =============================================================================
+# 5. SAFETY NET: deduplicate PATH after all modifications
+# =============================================================================
+path=($path)
+
+# =============================================================================
+# 6. SYNTAX HIGHLIGHTING — MUST be sourced LAST
+# =============================================================================
+if [[ -n "$HOMEBREW_PREFIX" ]]; then
+  source ${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+fi

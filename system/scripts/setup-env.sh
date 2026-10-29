@@ -173,6 +173,10 @@ install_system_dependencies() {
             bat eza exa fd fzf gh git-delta git-lfs htop jq lazygit
             lazygit neovim ripgrep tealdeer tldr tree uv yq zoxide
 
+            # Tools present in current install inventory
+            btop docker-completion dust fastfetch gemini-cli gogcli
+            lazydocker notcurses pkgconf
+
             # Shell enhancements
             zsh-autosuggestions zsh-syntax-highlighting powerlevel10k
 
@@ -223,13 +227,22 @@ install_dev_tools() {
     nvm use --lts
     nvm alias default --lts
 
-    # Install core global NPM packages (we'll use pnpm for most things)
-    log_info "Installing essential global NPM packages..."
-    NPM_PACKAGES=(
-        pnpm  # Our primary package manager
-    )
+    # Install pnpm (our primary package manager) via npm (corepack alternative)
+    log_info "Installing pnpm (primary package manager)..."
+    npm install -g pnpm
 
-    npm install -g "${NPM_PACKAGES[@]}"
+    # Install global packages via pnpm (more secure than npm)
+    log_info "Installing global packages via pnpm..."
+    PNPM_PACKAGES=(
+        @anthropic-ai/claude-code
+        @google/gemini-cli
+        @opencode/cli
+        @openai/codex
+        cline
+        pake-cli
+        tree-sitter-cli
+    )
+    pnpm add -g "${PNPM_PACKAGES[@]}"
 
     # Configure pnpm
     log_info "Configuring pnpm..."

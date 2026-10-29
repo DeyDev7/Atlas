@@ -12,6 +12,7 @@ echo "🐧 Installing APT packages..."
 APT_PACKAGES=(
     build-essential curl git zsh htop tree unzip
     fd-find lsd lua5.1 lua5.4 pipx python3-pip
+    tailscale obsidian ffmpeg php-cli
 )
 sudo apt update
 sudo apt install -y "${APT_PACKAGES[@]}"
@@ -29,8 +30,9 @@ brew tap steipete/tap
 brew tap yakitrak/yakitrak
 BREW_FORMULAE=(
     bat btop dust eza fastfetch fd fzf gh git-delta go
-    lazydocker lazygit neovim powerlevel10k ripgrep tldr
-    uv xsel zoxide zsh-autosuggestions zsh-syntax-highlighting
+    gogcli gemini-cli lazydocker lazygit neovim notcurses pkgconf
+    powerlevel10k ripgrep steipete/tap/wacli tldr uv
+    yakitrak/yakitrak/notesmd-cli zoxide zsh-autosuggestions zsh-syntax-highlighting
 )
 brew install "${BREW_FORMULAE[@]}"
 
@@ -42,15 +44,22 @@ if [[ ! -d "$HOME/.nvm" ]]; then
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
-echo "📦 Installing global NPM packages..."
+echo "📦 Installing global packages via pnpm..."
 # Ensure node is installed
 nvm install --lts
-NPM_PACKAGES=(
+# Ensure pnpm is available
+npm install -g pnpm
+
+PNPM_PACKAGES=(
+    @anthropic-ai/claude-code
     @google/gemini-cli
+    @opencode/cli
+    @openai/codex
+    cline
+    pake-cli
     tree-sitter-cli
-    openclaw
 )
-npm install -g "${NPM_PACKAGES[@]}"
+pnpm add -g "${PNPM_PACKAGES[@]}"
 
 # 4. Oh My Zsh
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
@@ -64,6 +73,8 @@ FILES=(
     ".zshrc"
     ".tmux.conf"
     ".p10k.zsh"
+    ".gitconfig"
+    ".gitignore_global"
 )
 
 for file in "${FILES[@]}"; do
