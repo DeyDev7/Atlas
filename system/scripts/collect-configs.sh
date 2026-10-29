@@ -31,6 +31,8 @@ if [[ -d "$HOME/.config/nvim" ]]; then
     mkdir -p "$DOTFILES_DIR/config/nvim"
     # Use rsync if available to avoid recursive cp issues, otherwise standard cp
     cp -r "$HOME/.config/nvim/." "$DOTFILES_DIR/config/nvim/"
+    # Keep generated artifacts (logs, backups) out of the repo
+    find "$DOTFILES_DIR/config/nvim" -type f \( -name '*.log' -o -name '*.bak' \) -delete
     echo "✅ Copied nvim config"
 fi
 

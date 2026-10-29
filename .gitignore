@@ -1,0 +1,19 @@
+# Logs / temp files captured accidentally by config collection
+*.log
+*.tmp
+
+# Editor/OS editor state and backups
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# Wine/WSL download metadata from Windows
+*:Zone.Identifier
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Node
+node_modules/
