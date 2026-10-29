@@ -34,6 +34,13 @@ if [[ -d "$HOME/.config/nvim" ]]; then
     echo "✅ Copied nvim config"
 fi
 
+# Collect ~/.ssh/config (never collect private keys)
+if [[ -f "$HOME/.ssh/config" ]]; then
+    mkdir -p "$DOTFILES_DIR/config/ssh"
+    cp "$HOME/.ssh/config" "$DOTFILES_DIR/config/ssh/config"
+    echo "✅ Copied ssh config"
+fi
+
 # Collect ~/.config/oh-my-posh
 if [[ -d "$HOME/.config/oh-my-posh" ]]; then
     mkdir -p "$DOTFILES_DIR/config/oh-my-posh"

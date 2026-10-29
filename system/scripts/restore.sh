@@ -94,4 +94,14 @@ if [[ -d "$DOTFILES_DIR/config/nvim" ]]; then
     echo "✅ Restored nvim config"
 fi
 
+# Restore ssh config
+if [[ -f "$DOTFILES_DIR/config/ssh/config" ]]; then
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+    [[ -f "$HOME/.ssh/config" ]] && mv "$HOME/.ssh/config" "$HOME/.ssh/config.bak"
+    cp "$DOTFILES_DIR/config/ssh/config" "$HOME/.ssh/config"
+    chmod 600 "$HOME/.ssh/config"
+    echo "✅ Restored ssh config"
+fi
+
 echo "✨ Environment restoration complete! Please restart your terminal."
